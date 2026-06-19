@@ -1,0 +1,32 @@
+# .air.toml — Air live reload configuration
+# Docs: https://github.com/air-verse/air
+
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  # Entry point
+  cmd             = "go build -o ./tmp/main cmd/web/main.go"
+  bin             = "./tmp/main"
+
+  # Rebuild on changes to these extensions
+  include_ext     = ["go", "templ", "html", "env"]
+
+  # Ignore generated templ files and vendored deps
+  exclude_regex   = ["_templ\\.go$"]
+  exclude_dir     = ["tmp", "vendor", "node_modules", "assets"]
+
+  # Kill the running process before restarting
+  send_interrupt  = true
+  kill_delay      = 500 # ms
+
+  # Show build log on error
+  log             = "tmp/build-errors.log"
+
+[screen]
+  clear_on_rebuild = true
+  keep_scroll      = true
+
+[log]
+  time      = false
+  main_only = true

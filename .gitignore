@@ -1,0 +1,120 @@
+# ============================================================
+# Go
+# ============================================================
+
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of `go build`
+/bin/
+/dist/
+/build/
+
+# Go module cache (only if vendoring)
+# vendor/
+
+# Go workspace file
+go.work.sum
+
+# Coverage output
+*.out
+coverage.html
+
+# Profiling output
+*.prof
+*.pprof
+
+# ============================================================
+# Air (live reload)
+# ============================================================
+
+# Air binary output (matches `tmp_dir` in .air.toml)
+/tmp/
+
+# Air config (optional — commit if you want shared config)
+# .air.toml
+
+# ============================================================
+# Templ
+# ============================================================
+
+# Generated Go files from .templ sources
+*_templ.go
+
+# ============================================================
+# Gin / Web server
+# ============================================================
+
+# Uploaded files (if stored locally)
+/uploads/
+/static/uploads/
+
+# ============================================================
+# Environment & secrets
+# ============================================================
+
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.crt
+
+# ============================================================
+# IDE / editors
+# ============================================================
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# GoLand / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+.vim/
+
+# Emacs
+\#*\#
+.\#*
+
+# ============================================================
+# OS
+# ============================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ============================================================
+# Logs & databases
+# ============================================================
+
+*.log
+*.sqlite
+*.sqlite3
+*.db
