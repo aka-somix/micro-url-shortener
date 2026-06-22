@@ -41,8 +41,8 @@ templ Base(title string) {
 				@components.NavBar(
 					configs.WebsiteName,
 					[]components.NavItem{
-						{Label: "URLs available", Href: "/urls"},
-						{Label: "About", Href: "/about"},
+						{Label: "URLs available", Href: configs.BaseURL + "/url/"},
+						{Label: "About", Href: configs.BaseURL + "/about"},
 					},
 				)
 			</header>

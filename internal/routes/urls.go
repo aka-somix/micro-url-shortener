@@ -1,6 +1,10 @@
 package routes
 
 import (
+	"aka-somix/micro-url-shortener/internal/models"
+	render "aka-somix/micro-url-shortener/pkg"
+	"aka-somix/micro-url-shortener/views/pages"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +20,7 @@ func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
 		// GET url/
 		// Retrieves all urls
 		urlGroup.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{"available": []string{}})
+			render.RenderTemplate(c, 200, pages.UrlsAvailable([]models.URL{}))
 		})
 
 		// POST url/

@@ -19,8 +19,12 @@ func AddToRouter(router *gin.Engine) error {
 
 	// HomePage Route
 	router.GET("/", func(c *gin.Context) {
+		render.RenderTemplate(c, 200, pages.Home())
+	})
 
-		render.RenderTemplate(c, 200, pages.Home("Salvatore"))
+	// About Route
+	router.GET("/about", func(c *gin.Context) {
+		render.RenderTemplate(c, 200, pages.About())
 	})
 
 	return nil
