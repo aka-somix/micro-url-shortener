@@ -4,6 +4,7 @@ import (
 	"aka-somix/micro-url-shortener/internal/models"
 	render "aka-somix/micro-url-shortener/pkg"
 	"aka-somix/micro-url-shortener/views/pages"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,6 +28,17 @@ func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
 		// Creates a new url
 		urlGroup.POST("/", func(c *gin.Context) {
 			c.JSON(201, gin.H{"message": "URL created"})
+		})
+
+		urlGroup.GET("/:short", func(c *gin.Context) {
+			short := c.Param("short")
+			log.Printf("[url] short code: %s", short)
+
+			if short == "ex1a2b" {
+				c.Redirect(302, "https://example.com")
+			} else {
+				render.RenderTemplate(c, 404, pages.NotFound())
+			}
 		})
 	}
 }

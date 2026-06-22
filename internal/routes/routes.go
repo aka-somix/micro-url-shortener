@@ -27,5 +27,10 @@ func AddToRouter(router *gin.Engine) error {
 		render.RenderTemplate(c, 200, pages.About())
 	})
 
+	// 404
+	router.NoRoute(func(c *gin.Context) {
+		render.RenderTemplate(c, 404, pages.NotFound())
+	})
+
 	return nil
 }

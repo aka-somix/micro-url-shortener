@@ -1,12 +1,14 @@
 package pages
 
 import "aka-somix/micro-url-shortener/views/components"
+import "aka-somix/micro-url-shortener/configs"
+
 
 
 templ UrlForm() {
 	<section class="mx-auto w-full max-w-lg">
 		<div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-			<h2 class="mb-4 text-lg font-semibold text-gray-900">Shorten a URL</h2>
+			<h2 class="mb-4 text-lg font-semibold text-gray-900">🔗 Shorten a URL</h2>
 			<form
 				hx-post="/url/"
 				hx-target="#result"
@@ -57,7 +59,7 @@ templ recentUrlRow(code string) {
 	<div class="flex items-center justify-between gap-4 px-4 py-3">
 		<div class="min-w-0 flex-1">
 			<a
-				href={ templ.URL("/" + code) }
+				href={ templ.URL("/url/" + code) }
 				class="text-sm font-medium text-indigo-600 hover:text-indigo-700"
 			>
 				/{ code }
@@ -65,7 +67,7 @@ templ recentUrlRow(code string) {
 		</div>
 		<button
 			type="button"
-			onclick={ templ.JSFuncCall("navigator.clipboard.writeText", code) }
+			onclick={ templ.JSFuncCall("navigator.clipboard.writeText", configs.BaseURL + "/url/" + code) }
 			class="shrink-0 rounded-md border border-gray-100 px-3 py-1 text-xs text-gray-500 transition-colors hover:border-indigo-200 hover:text-indigo-600"
 		>
 			Copy
@@ -76,7 +78,7 @@ templ recentUrlRow(code string) {
 templ RecentUrls() {
 	<section class="mx-auto w-full max-w-lg py-12">
 		<h2 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-400">
-			🌐 Latest shortened
+			🌐 Latest shortened url
 		</h2>
 		<div class="divide-y divide-gray-50 rounded-xl border border-gray-100 bg-white shadow-sm">
 			@recentUrlRow("ex1a2b")
