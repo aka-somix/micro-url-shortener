@@ -1,0 +1,19 @@
+package components
+
+type NavItem struct {
+	Label string
+	Href  string
+}
+
+templ NavBar(title string,items []NavItem) {
+	<nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+		<a href="/" class="text-lg font-semibold tracking-tight">
+			{ title }
+		</a>
+		<ul class="flex items-center gap-6 text-sm font-medium text-gray-600">
+			for _, item := range items {
+				<li><a href={ templ.URL(item.Href) } class="hover:text-gray-900 transition-colors">{ item.Label }</a></li>
+			}
+		</ul>
+	</nav>
+}

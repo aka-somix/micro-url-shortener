@@ -1,7 +1,7 @@
 package main
 
 import (
-	v1 "aka-somix/micro-url-shortener/internal/routes/v1"
+	"aka-somix/micro-url-shortener/internal/routes"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,12 +9,7 @@ import (
 func main() {
 	router := gin.Default()
 
-	v1.AddRoutesTo(router)
+	routes.AddToRouter(router)
 
-	router.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Healthy",
-		})
-	})
 	router.Run() // listens on 0.0.0.0:8080
 }

@@ -1,0 +1,81 @@
+package pages
+
+import "aka-somix/micro-url-shortener/views/components"
+import "aka-somix/micro-url-shortener/configs"
+
+templ Base(title string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<meta name="description" content=""/>
+
+			<title>{ configs.WebsiteName } | { title }</title>
+
+			<!-- Tailwind CSS -->
+			<script src="https://cdn.tailwindcss.com"></script>
+
+			<!-- htmx -->
+			<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+
+			<!-- Optional: htmx extensions -->
+			<script src="https://unpkg.com/htmx-ext-loading-states@2.0.0/loading-states.js"></script>
+
+			<!-- Favicon -->
+			<link rel="icon" type="image/svg+xml" href="/static/favicon.svg"/>
+		</head>
+
+		<!--
+			hx-boost="true"   — progressively enhances all <a> and <form> tags
+			                    to use htmx AJAX instead of full page loads.
+			hx-ext="..."      — list any htmx extensions you enabled above.
+		-->
+		<body
+			hx-boost="true"
+			hx-ext="loading-states"
+			class="min-h-screen bg-white text-gray-900 antialiased"
+		>
+			<!-- Top navigation -->
+			<header class="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur">
+				@components.NavBar(
+					configs.WebsiteName,
+					[]components.NavItem{
+						{Label: "URLs available", Href: "/urls"},
+						{Label: "About", Href: "/about"},
+					},
+				)
+			</header>
+
+			<!--
+				Main content slot — every page renders its content here.
+				hx-target="#main-content" is a convenient default for most
+				htmx requests that want to swap the page body.
+			-->
+			<main
+				id="main-content"
+				class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+			>
+				{ children... }
+			</main>
+
+			<!-- Global htmx loading indicator (shown during any request) -->
+			<div
+				id="global-loader"
+				class="pointer-events-none fixed inset-x-0 top-0 z-[100] hidden h-0.5 bg-blue-500"
+				data-loading-class-remove="hidden"
+			></div>
+
+			<!-- Toast / notification target — swap alerts here from the server -->
+			<div
+				id="toast"
+				class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"
+				aria-live="polite"
+			></div>
+
+			<footer class="mt-auto border-t border-gray-100 py-6 text-center text-xs text-gray-400">
+				Made with 💜 by <a href="https://github.com/aka-somix" target="_blank" class="text-indigo-600 hover:underline">aka-somix</a>
+			</footer>
+		</body>
+	</html>
+}

@@ -6,7 +6,7 @@ tmp_dir = "tmp"
 
 [build]
   # Entry point
-  cmd             = "go build -o ./tmp/main cmd/web/main.go"
+  cmd             = "go tool templ generate && go build -o ./tmp/main cmd/web/main.go"
   bin             = "./tmp/main"
 
   # Rebuild on changes to these extensions

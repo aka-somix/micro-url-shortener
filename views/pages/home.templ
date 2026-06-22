@@ -1,0 +1,96 @@
+package pages
+
+import "aka-somix/micro-url-shortener/views/components"
+
+
+templ UrlForm() {
+	<section class="mx-auto w-full max-w-lg">
+		<div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+			<h2 class="mb-4 text-lg font-semibold text-gray-900">Shorten a URL</h2>
+			<form
+				hx-post="/url/"
+				hx-target="#result"
+				hx-swap="innerHTML"
+				class="flex flex-col gap-3 sm:flex-row"
+			>
+				<input
+					type="url"
+					name="url"
+					required
+					placeholder="https://example.com/very/long/url"
+					class="flex-1 rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+				/>
+				<button
+					type="submit"
+					class="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+				>
+					Shorten
+				</button>
+			</form>
+			<div id="result" class="mt-4"></div>
+		</div>
+	</section>
+}
+
+templ UrlSuccess(shortUrl string) {
+	<div class="flex items-center justify-between gap-3 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+		<span>
+			Short URL: <a href={ templ.URL(shortUrl) } class="font-medium underline underline-offset-2 hover:text-green-900" target="_blank">{ shortUrl }</a>
+		</span>
+		<button
+			type="button"
+			onclick={ templ.JSFuncCall("navigator.clipboard.writeText", shortUrl) }
+			class="shrink-0 rounded border border-green-300 bg-white px-2 py-1 text-xs text-green-700 hover:bg-green-100"
+		>
+			Copy
+		</button>
+	</div>
+}
+
+templ UrlError(message string) {
+	<div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+		{ message }
+	</div>
+}
+
+templ recentUrlRow(code string) {
+	<div class="flex items-center justify-between gap-4 px-4 py-3">
+		<div class="min-w-0 flex-1">
+			<a
+				href={ templ.URL("/" + code) }
+				class="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+			>
+				/{ code }
+			</a>
+		</div>
+		<button
+			type="button"
+			onclick={ templ.JSFuncCall("navigator.clipboard.writeText", code) }
+			class="shrink-0 rounded-md border border-gray-100 px-3 py-1 text-xs text-gray-500 transition-colors hover:border-indigo-200 hover:text-indigo-600"
+		>
+			Copy
+		</button>
+	</div>
+}
+
+templ RecentUrls() {
+	<section class="mx-auto w-full max-w-lg py-12">
+		<h2 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-400">
+			🌐 Latest shortened
+		</h2>
+		<div class="divide-y divide-gray-50 rounded-xl border border-gray-100 bg-white shadow-sm">
+			@recentUrlRow("ex1a2b")
+			@recentUrlRow("gh3c4d")
+		</div>
+	</section>
+}
+
+templ Home(name string) {
+	@Base("Home") {
+		<div class="flex flex-col items-center gap-4">
+			@components.HeroBanner()
+			@UrlForm()
+			@RecentUrls()
+		</div>
+	}
+}
