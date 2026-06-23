@@ -72,7 +72,7 @@ func (r *JsonUrlRepository) GetById(_ context.Context, id string) (*models.URL, 
 	url, exists := r.urls[id]
 
 	if !exists {
-		return nil, nil
+		return nil, models.ErrNotFound
 	}
 	return &url, nil
 }

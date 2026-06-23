@@ -19,8 +19,9 @@ templ Base(title string) {
 			<!-- htmx -->
 			<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 
-			<!-- Optional: htmx extensions -->
+			<!-- htmx extensions -->
 			<script src="https://unpkg.com/htmx-ext-loading-states@2.0.0/loading-states.js"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.4/dist/ext/json-enc.js"></script>
 
 			<!-- Favicon -->
 			<link rel="icon" type="image/svg+xml" href="/static/favicon.svg"/>
@@ -33,7 +34,7 @@ templ Base(title string) {
 		-->
 		<body
 			hx-boost="true"
-			hx-ext="loading-states"
+			hx-ext="loading-states, json-enc"
 			class="min-h-screen bg-white text-gray-900 antialiased"
 		>
 			<!-- Top navigation -->

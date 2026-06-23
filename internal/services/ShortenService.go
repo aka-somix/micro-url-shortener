@@ -4,6 +4,9 @@ import (
 	"aka-somix/micro-url-shortener/configs"
 	"aka-somix/micro-url-shortener/internal/models"
 	"aka-somix/micro-url-shortener/internal/repositories"
+	"context"
+
+	"github.com/google/uuid"
 )
 
 type UrlShortenService struct {
@@ -17,13 +20,35 @@ func NewUrlShortenService(urlRepo repositories.URLRepository) *UrlShortenService
 }
 
 func (s *UrlShortenService) ShortenURL(originalURL string) (string, error) {
-	return configs.BaseURL + "/url/" + "ex1a2b", nil
+	newShort := uuid.New().String()
+	shortUrl := configs.BaseURL + "/url/" + newShort
+
+	s.urlRepository.Create(
+		context.TODO(),
+		&models.URL{
+			ID:          newShort,
+			OriginalURL: originalURL,
+			ShortURL:    shortUrl,
+		})
+	return newShort, nil
 }
 
-func (s *UrlShortenService) GetUrlFromShort(shortURL string) (models.URL, error) {
-	return models.URL{ShortURL: shortURL, OriginalURL: "https://example.com"}, nil
+func (s *UrlShortenService) GetUrlFromShort(shortURL string) (*models.URL, error) {
+	foundUrl, err := s.urlRepository.GetById(context.TODO(), shortURL)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return foundUrl, nil
 }
 
 func (s *UrlShortenService) GetAllURLs() ([]models.URL, error) {
-	return []models.URL{{ShortURL: "ex1a2b", OriginalURL: "https://example.com"}}, nil
+	allUrls, err := s.urlRepository.GetAll(context.TODO())
+
+	if err != nil {
+		return nil, err
+	}
+
+	return allUrls, nil
 }

@@ -1,7 +1,7 @@
 package pages
 
 import "aka-somix/micro-url-shortener/views/components"
-import "aka-somix/micro-url-shortener/configs"
+import "aka-somix/micro-url-shortener/views/pages/home_sections"
 
 
 
@@ -55,44 +55,13 @@ templ UrlError(message string) {
 	</div>
 }
 
-templ recentUrlRow(code string) {
-	<div class="flex items-center justify-between gap-4 px-4 py-3">
-		<div class="min-w-0 flex-1">
-			<a
-				href={ templ.URL("/url/" + code) }
-				class="text-sm font-medium text-indigo-600 hover:text-indigo-700"
-			>
-				/{ code }
-			</a>
-		</div>
-		<button
-			type="button"
-			onclick={ templ.JSFuncCall("navigator.clipboard.writeText", configs.BaseURL + "/url/" + code) }
-			class="shrink-0 rounded-md border border-gray-100 px-3 py-1 text-xs text-gray-500 transition-colors hover:border-indigo-200 hover:text-indigo-600"
-		>
-			Copy
-		</button>
-	</div>
-}
-
-templ RecentUrls() {
-	<section class="mx-auto w-full max-w-lg py-12">
-		<h2 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-400">
-			🌐 Latest shortened url
-		</h2>
-		<div class="divide-y divide-gray-50 rounded-xl border border-gray-100 bg-white shadow-sm">
-			@recentUrlRow("ex1a2b")
-			@recentUrlRow("gh3c4d")
-		</div>
-	</section>
-}
 
 templ Home() {
 	@Base("Home") {
 		<div class="flex flex-col items-center gap-4">
 			@components.HeroBanner()
 			@UrlForm()
-			@RecentUrls()
+			@home_sections.LatestUrls()
 		</div>
 	}
 }
