@@ -1,7 +1,8 @@
 package routes
 
 import (
-	"aka-somix/micro-url-shortener/internal/models"
+	"aka-somix/micro-url-shortener/internal/repositories"
+	"aka-somix/micro-url-shortener/internal/services"
 	render "aka-somix/micro-url-shortener/pkg"
 	"aka-somix/micro-url-shortener/views/pages"
 	"log"
@@ -9,10 +10,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type URLsRouter struct{}
+type URLsRouter struct {
+	urlShortenService *services.UrlShortenService
+}
 
 func NewUrlsRouter() (*URLsRouter, error) {
-	return &URLsRouter{}, nil
+	urlRepo, err := repositories.NewJsonUrlRepository("tmp/local/database.json")
+	if err != nil {
+		return nil, err
+	}
+
+	urlShortenService := services.NewUrlShortenService(urlRepo)
+
+	return &URLsRouter{urlShortenService: urlShortenService}, nil
 }
 
 func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
@@ -21,24 +31,34 @@ func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
 		// GET url/
 		// Retrieves all urls
 		urlGroup.GET("/", func(c *gin.Context) {
-			render.RenderTemplate(c, 200, pages.UrlsAvailable([]models.URL{}))
+			urls, err := router.urlShortenService.GetAllURLs()
+			if err != nil {
+				// TODO: Handle error
+				return
+			}
+			render.RenderTemplate(c, 200, pages.UrlsAvailable(urls))
 		})
 
 		// POST url/
 		// Creates a new url
 		urlGroup.POST("/", func(c *gin.Context) {
-			c.JSON(201, gin.H{"message": "URL created"})
+			router.urlShortenService.ShortenURL("https://example.com")
 		})
 
 		urlGroup.GET("/:short", func(c *gin.Context) {
 			short := c.Param("short")
 			log.Printf("[url] short code: %s", short)
 
-			if short == "ex1a2b" {
-				c.Redirect(302, "https://example.com")
-			} else {
+			foundURL, err := router.urlShortenService.GetUrlFromShort(short)
+
+			log.Printf("[url] original url: %s", foundURL.OriginalURL)
+
+			if err != nil {
+				// TODO: Handle error
 				render.RenderTemplate(c, 404, pages.NotFound())
 			}
+
+			c.Redirect(302, foundURL.OriginalURL)
 		})
 	}
 }

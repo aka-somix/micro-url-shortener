@@ -9,7 +9,10 @@ import (
 func main() {
 	router := gin.Default()
 
-	routes.AddToRouter(router)
+	error := routes.AddToRouter(router)
+	if error != nil {
+		panic(error)
+	}
 
 	router.Run() // listens on 0.0.0.0:8080
 }
