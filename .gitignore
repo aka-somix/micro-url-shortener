@@ -15,7 +15,6 @@
 # Output of `go build`
 /bin/
 /dist/
-/build/
 
 # Go module cache (only if vendoring)
 # vendor/
