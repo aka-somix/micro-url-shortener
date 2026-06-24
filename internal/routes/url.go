@@ -20,11 +20,12 @@ type URLsRouter struct {
 }
 
 func NewUrlsRouter() (*URLsRouter, error) {
-	urlRepo, err := repositories.NewJsonUrlRepository("tmp/local/database.json")
+	// urlRepo, err := repositories.NewJsonUrlRepository("tmp/local/database.json")
+	urlRepo, err := repositories.NewRedisUrlRepository()
+
 	if err != nil {
 		return nil, err
 	}
-
 	urlShortenService := services.NewUrlShortenService(urlRepo)
 
 	return &URLsRouter{urlShortenService: urlShortenService}, nil

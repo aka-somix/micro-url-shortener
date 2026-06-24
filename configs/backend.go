@@ -18,3 +18,12 @@ var BaseURL = func() string {
 	}
 	return fmt.Sprintf("http://localhost:%s", Port())
 }()
+
+var RedisURL = func() string {
+	if v := os.Getenv("REDIS_URL"); v != "" {
+		return v
+	}
+	return "localhost:6379"
+}()
+
+var RedisPassword = os.Getenv("REDIS_PASSWORD")
