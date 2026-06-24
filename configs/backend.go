@@ -3,7 +3,17 @@ package configs
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
+
+func intEnv(key string, fallback int) int {
+	if v := os.Getenv(key); v != "" {
+		if n, err := strconv.Atoi(v); err == nil {
+			return n
+		}
+	}
+	return fallback
+}
 
 var Port = func() string {
 	if v := os.Getenv("PORT"); v != "" {
@@ -27,3 +37,7 @@ var RedisURL = func() string {
 }()
 
 var RedisPassword = os.Getenv("REDIS_PASSWORD")
+
+var RateLimitRPS = intEnv("RATE_LIMIT_RPS", 2)
+var MaxURLs = intEnv("MAX_URLS", 10)
+var URLTTLMinutes = intEnv("URL_TTL_MINUTES", 1)

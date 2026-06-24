@@ -1,6 +1,8 @@
 package main
 
 import (
+	"aka-somix/micro-url-shortener/configs"
+	"aka-somix/micro-url-shortener/internal/middleware"
 	"aka-somix/micro-url-shortener/internal/routes"
 
 	"github.com/gin-gonic/gin"
@@ -8,6 +10,8 @@ import (
 
 func main() {
 	router := gin.Default()
+
+	router.Use(middleware.RateLimit(configs.RateLimitRPS))
 
 	error := routes.AddToRouter(router)
 	if error != nil {

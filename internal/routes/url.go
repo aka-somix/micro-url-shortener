@@ -8,6 +8,7 @@ import (
 	render "aka-somix/micro-url-shortener/pkg"
 	"aka-somix/micro-url-shortener/views/pages"
 	"aka-somix/micro-url-shortener/views/pages/home_sections"
+	"errors"
 	"log"
 	"strconv"
 	"strings"
@@ -84,8 +85,12 @@ func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
 
 			shortCode, err := router.urlShortenService.ShortenURL(req.Url)
 			if err != nil {
+				if errors.Is(err, models.ErrStorageFull) {
+					render.RenderTemplate(c, 200, pages.UrlError("Storage limit reached — try again later"))
+					return
+				}
 				log.Printf("Error shortening URL: %s", err)
-				render.RenderTemplate(c, 500, pages.UrlError("Failed to shorten URL"))
+				render.RenderTemplate(c, 200, pages.UrlError("Failed to shorten URL"))
 				return
 			}
 

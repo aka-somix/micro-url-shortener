@@ -1,0 +1,50 @@
+package pages
+
+templ TooManyRequests() {
+	@Base("429 — Slow down") {
+		<div class="flex flex-col items-center justify-center py-20 text-center">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 200 200"
+				width="220"
+				height="220"
+				class="mb-8"
+				aria-hidden="true"
+			>
+				<!-- Clock face -->
+				<circle cx="100" cy="100" r="70" fill="#111827"/>
+				<circle cx="100" cy="100" r="70" fill="none" stroke="#1f2937" stroke-width="4"/>
+				<!-- Tick marks -->
+				<line x1="100" y1="36" x2="100" y2="48" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+				<line x1="100" y1="152" x2="100" y2="164" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+				<line x1="36" y1="100" x2="48" y2="100" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+				<line x1="152" y1="100" x2="164" y2="100" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+				<!-- Hour hand (pointing ~10) -->
+				<line x1="100" y1="100" x2="72" y2="68" stroke="#f9fafb" stroke-width="4" stroke-linecap="round"/>
+				<!-- Minute hand (pointing ~12) -->
+				<line x1="100" y1="100" x2="100" y2="52" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+				<!-- Center dot -->
+				<circle cx="100" cy="100" r="4" fill="#fbbf24"/>
+				<!-- 429 label -->
+				<text
+					x="100"
+					y="130"
+					text-anchor="middle"
+					dominant-baseline="middle"
+					font-family="monospace"
+					font-size="18"
+					font-weight="bold"
+					fill="#f9fafb"
+					opacity="0.9"
+				>429</text>
+			</svg>
+
+			<h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+				Too many requests
+			</h1>
+			<p class="mt-4 max-w-sm text-sm text-gray-500">
+				You&#39;re going too fast. Wait a moment and try again.
+			</p>
+		</div>
+	}
+}

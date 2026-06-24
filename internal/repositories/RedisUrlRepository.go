@@ -5,6 +5,7 @@ import (
 	"aka-somix/micro-url-shortener/internal/models"
 	"context"
 	"strconv"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -38,19 +39,29 @@ type urlHash struct {
 }
 
 func (r *RedisUrlRepository) Create(ctx context.Context, url *models.URL) error {
-	pipe := r.client.TxPipeline()
+	count, err := r.client.ZCard(ctx, urlsSortedSet).Result()
+	if err != nil {
+		return err
+	}
+	if count >= int64(configs.MaxURLs) {
+		return models.ErrStorageFull
+	}
 
+	ttl := time.Duration(configs.URLTTLMinutes) * time.Minute
+
+	pipe := r.client.TxPipeline()
 	pipe.HSet(ctx, urlHashPrefix+url.ID, urlHash{
 		ID:          url.ID,
 		OriginalURL: url.OriginalURL,
 		CreatedAt:   url.CreatedAt,
 	})
+	pipe.Expire(ctx, urlHashPrefix+url.ID, ttl)
 	pipe.ZAdd(ctx, urlsSortedSet, redis.Z{
 		Score:  float64(url.CreatedAt),
 		Member: url.ID,
 	})
 
-	_, err := pipe.Exec(ctx)
+	_, err = pipe.Exec(ctx)
 	return err
 }
 
@@ -76,6 +87,11 @@ func (r *RedisUrlRepository) GetAll(ctx context.Context) ([]models.URL, error) {
 		vals, err := r.client.HGetAll(ctx, key).Result()
 		if err != nil {
 			return nil, err
+		}
+		if len(vals) == 0 {
+			id := key[len(urlHashPrefix):]
+			r.client.ZRem(ctx, urlsSortedSet, id)
+			continue
 		}
 		url, err := assembleUrl(vals)
 		if err != nil {
@@ -104,6 +120,10 @@ func (r *RedisUrlRepository) GetLatest(ctx context.Context, n int) ([]models.URL
 		vals, err := r.client.HGetAll(ctx, urlHashPrefix+id).Result()
 		if err != nil {
 			return nil, err
+		}
+		if len(vals) == 0 {
+			r.client.ZRem(ctx, urlsSortedSet, id)
+			continue
 		}
 		url, err := assembleUrl(vals)
 		if err != nil {
