@@ -52,3 +52,7 @@ func (s *UrlShortenService) GetAllURLs() ([]models.URL, error) {
 
 	return allUrls, nil
 }
+
+func (s *UrlShortenService) GetLatestURLs(n int) ([]models.URL, error) {
+	return s.urlRepository.GetLatest(context.TODO(), n)
+}

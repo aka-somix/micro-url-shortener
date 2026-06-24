@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"os"
+	"sort"
 	"sync"
 )
 
@@ -86,6 +87,23 @@ func (r *JsonUrlRepository) GetAll(_ context.Context) ([]models.URL, error) {
 		urls = append(urls, url)
 	}
 	return urls, nil
+}
+
+func (r *JsonUrlRepository) GetLatest(_ context.Context, n int) ([]models.URL, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	all := make([]models.URL, 0, len(r.urls))
+	for _, url := range r.urls {
+		all = append(all, url)
+	}
+	sort.Slice(all, func(i, j int) bool {
+		return all[i].CreatedAt > all[j].CreatedAt
+	})
+	if n > len(all) {
+		n = len(all)
+	}
+	return all[:n], nil
 }
 
 func (r *JsonUrlRepository) DeleteById(_ context.Context, id string) error {

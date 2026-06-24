@@ -13,6 +13,7 @@ templ UrlForm() {
 				hx-post="/url/"
 				hx-target="#result"
 				hx-swap="innerHTML"
+				hx-on--after-request="htmx.trigger('#latest-urls-container', 'refresh')"
 				class="flex flex-col gap-3 sm:flex-row"
 			>
 				<input

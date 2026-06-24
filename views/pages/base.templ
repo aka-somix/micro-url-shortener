@@ -35,7 +35,7 @@ templ Base(title string) {
 		<body
 			hx-boost="true"
 			hx-ext="loading-states, json-enc"
-			class="min-h-screen bg-white text-gray-900 antialiased"
+			class="min-h-screen flex flex-col bg-white text-gray-900 antialiased"
 		>
 			<!-- Top navigation -->
 			<header class="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur">
@@ -55,7 +55,7 @@ templ Base(title string) {
 			-->
 			<main
 				id="main-content"
-				class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+				class="flex-1 mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
 			>
 				{ children... }
 			</main>

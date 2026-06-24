@@ -7,7 +7,9 @@ import (
 	"aka-somix/micro-url-shortener/internal/services"
 	render "aka-somix/micro-url-shortener/pkg"
 	"aka-somix/micro-url-shortener/views/pages"
+	"aka-somix/micro-url-shortener/views/pages/home_sections"
 	"log"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,6 +41,22 @@ func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
 				return
 			}
 			render.RenderTemplate(c, 200, pages.UrlsAvailable(urls))
+		})
+
+		urlGroup.GET("/latest", func(c *gin.Context) {
+			n := 5
+			if nStr := c.Query("n"); nStr != "" {
+				if parsed, err := strconv.Atoi(nStr); err == nil && parsed > 0 {
+					n = parsed
+				}
+			}
+			urls, err := router.urlShortenService.GetLatestURLs(n)
+			if err != nil {
+				log.Printf("[url] error fetching latest: %s", err)
+				render.RenderTemplate(c, 500, pages.UrlError("Failed to fetch latest URLs"))
+				return
+			}
+			render.RenderTemplate(c, 200, home_sections.ShortenedUrlRows(urls))
 		})
 
 		// POST url/
