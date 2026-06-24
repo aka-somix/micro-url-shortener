@@ -8,6 +8,7 @@ RUN go mod download
 
 COPY . .
 
+RUN go tool templ generate
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /app/server ./cmd/web
 
 # --- final ---
