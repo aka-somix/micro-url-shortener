@@ -5,6 +5,7 @@ import (
 	"aka-somix/micro-url-shortener/internal/models"
 	"aka-somix/micro-url-shortener/internal/repositories"
 	"aka-somix/micro-url-shortener/internal/services"
+	"aka-somix/micro-url-shortener/internal/validation"
 	render "aka-somix/micro-url-shortener/pkg"
 	"aka-somix/micro-url-shortener/views/pages"
 	"aka-somix/micro-url-shortener/views/pages/home_sections"
@@ -73,8 +74,8 @@ func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
 				return
 			}
 
-			if req.Url == "" {
-				render.RenderTemplate(c, 200, pages.UrlError("URL is required"))
+			if err := validation.ValidateURL(req.Url); err != nil {
+				render.RenderTemplate(c, 200, pages.UrlError(err.Error()))
 				return
 			}
 
