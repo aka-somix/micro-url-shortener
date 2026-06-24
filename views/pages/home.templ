@@ -30,7 +30,6 @@ templ UrlForm() {
 					Shorten
 				</button>
 			</form>
-			<div id="result" class="mt-4"></div>
 		</div>
 	</section>
 }
@@ -62,6 +61,7 @@ templ Home() {
 		<div class="flex flex-col items-center gap-4">
 			@components.HeroBanner()
 			@UrlForm()
+			<div id="result" class="mx-auto w-full max-w-lg"></div>
 			@home_sections.LatestUrls()
 		</div>
 	}

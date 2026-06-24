@@ -10,6 +10,7 @@ import (
 	"aka-somix/micro-url-shortener/views/pages/home_sections"
 	"log"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -37,7 +38,8 @@ func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
 		urlGroup.GET("/", func(c *gin.Context) {
 			urls, err := router.urlShortenService.GetAllURLs()
 			if err != nil {
-				// TODO: Handle error
+				log.Printf("[url] error fetching all URLs: %s", err)
+				render.RenderTemplate(c, 503, pages.ServiceUnavailable())
 				return
 			}
 			render.RenderTemplate(c, 200, pages.UrlsAvailable(urls))
@@ -65,12 +67,17 @@ func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
 			var req models.NewURLRequest
 			if err := c.ShouldBindJSON(&req); err != nil {
 				log.Printf("Error binding JSON: %s", err)
-				render.RenderTemplate(c, 400, pages.UrlError("Invalid request: expected JSON with a 'url' field"))
+				render.RenderTemplate(c, 200, pages.UrlError("Invalid request: expected JSON with a 'url' field"))
 				return
 			}
 
 			if req.Url == "" {
-				render.RenderTemplate(c, 400, pages.UrlError("URL is required"))
+				render.RenderTemplate(c, 200, pages.UrlError("URL is required"))
+				return
+			}
+
+			if strings.Contains(req.Url, configs.BaseURL) {
+				render.RenderTemplate(c, 200, pages.UrlError("Cannot shorten a URL from this domain"))
 				return
 			}
 
@@ -90,7 +97,12 @@ func (router *URLsRouter) AddRoutesTo(group *gin.RouterGroup) {
 			log.Printf("[url] short code: %s", short)
 
 			foundURL, err := router.urlShortenService.GetUrlFromShort(short)
-			if err != nil || foundURL == nil {
+			if err != nil {
+				log.Printf("[url] error fetching short code %s: %s", short, err)
+				render.RenderTemplate(c, 503, pages.ServiceUnavailable())
+				return
+			}
+			if foundURL == nil {
 				log.Printf("[url] short code %s not found", short)
 				render.RenderTemplate(c, 404, pages.NotFound())
 				return

@@ -1,0 +1,56 @@
+package pages
+
+templ ServiceUnavailable() {
+	@Base("503 — Service unavailable") {
+		<div class="flex flex-col items-center justify-center py-20 text-center">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 200 200"
+				width="220"
+				height="220"
+				class="mb-8"
+				aria-hidden="true"
+			>
+				<!-- Outer broken ring -->
+				<circle cx="100" cy="100" r="70" fill="none" stroke="#e5e7eb" stroke-width="6"/>
+				<!-- Gear body -->
+				<circle cx="100" cy="100" r="40" fill="#111827"/>
+				<!-- Gear teeth -->
+				<rect x="93" y="22" width="14" height="20" rx="3" fill="#374151"/>
+				<rect x="93" y="158" width="14" height="20" rx="3" fill="#374151"/>
+				<rect x="22" y="93" width="20" height="14" rx="3" fill="#374151"/>
+				<rect x="158" y="93" width="20" height="14" rx="3" fill="#374151"/>
+				<rect x="46" y="46" width="14" height="20" rx="3" fill="#374151" transform="rotate(45 53 56)"/>
+				<rect x="140" y="46" width="14" height="20" rx="3" fill="#374151" transform="rotate(-45 147 56)"/>
+				<rect x="46" y="134" width="14" height="20" rx="3" fill="#374151" transform="rotate(-45 53 144)"/>
+				<rect x="140" y="134" width="14" height="20" rx="3" fill="#374151" transform="rotate(45 147 144)"/>
+				<!-- Lightning bolt -->
+				<path d="M 108 70 L 92 102 L 102 102 L 92 130 L 116 95 L 104 95 Z" fill="#fbbf24" opacity="0.9"/>
+				<!-- 503 label -->
+				<text
+					x="100"
+					y="172"
+					text-anchor="middle"
+					dominant-baseline="middle"
+					font-family="monospace"
+					font-size="13"
+					font-weight="bold"
+					fill="#6b7280"
+				>503</text>
+			</svg>
+
+			<h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+				Service unavailable
+			</h1>
+			<p class="mt-4 max-w-sm text-sm text-gray-500">
+				Something broke on our end. Try again in a moment.
+			</p>
+			<a
+				href="/"
+				class="mt-8 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+			>
+				Back to home
+			</a>
+		</div>
+	}
+}

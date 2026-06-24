@@ -23,6 +23,9 @@ templ Base(title string) {
 			<script src="https://unpkg.com/htmx-ext-loading-states@2.0.0/loading-states.js"></script>
 			<script src="https://unpkg.com/htmx.org@2.0.4/dist/ext/json-enc.js"></script>
 
+			<!-- swap on all status codes, including 4xx/5xx -->
+			<script>htmx.config.responseHandling = [{code:".*", swap: true}];</script>
+
 			<!-- Favicon -->
 			<link rel="icon" type="image/svg+xml" href="/static/favicon.svg"/>
 		</head>
